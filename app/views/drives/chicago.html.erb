@@ -1,0 +1,35 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>City</th>
+      <th>Num passengers</th>
+      <th>Driver</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @drives.each do |drive| %>
+    <% if drive.city == "chicago" %>
+      <tr>
+        <td><%= drive.city %></td>
+        <td><%= drive.num_passengers %></td>
+        <td><%= drive.driver_id %></td>
+        <td><%= link_to 'Show', drive %></td>
+        <% if drive.driver_id == @user.id %>
+        <td><%= link_to 'Edit', edit_drife_path(drive) %></td>
+        <td><%= link_to 'Destroy', drive, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% else %> 
+        <td>
+          <% unless drive.passenger_ids.include?(@user.id.to_s) %>
+          <button type = "button" id = "<%=  drive.id %>" class = "addPassenger btn btn-primary" class="btn btn-primary">add myself to this ride
+          </button>
+        </td>
+        <% end %>
+        <% end %>
+        
+      </tr>
+    <% end %>
+    <% end %>
+  </tbody>
+</table>

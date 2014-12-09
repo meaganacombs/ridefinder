@@ -1,0 +1,85 @@
+<h1>Listing drives</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>City</th>
+      <th>Num passengers</th>
+      <th>Driver</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @drives.each do |drive| %>
+      <tr>
+        <td><%= drive.city %></td>
+        <td><%= drive.num_passengers %></td>
+        <td><%= drive.driver_id %></td>
+        <td><%= link_to 'Show', drive %></td>
+        <% if drive.driver_id == @user.id %>
+        <td><%= link_to 'Edit', edit_drife_path(drive) %></td>
+        <td><%= link_to 'Destroy', drive, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% else %> 
+        <td>
+          <% unless drive.passenger_ids.include?(@user.id.to_s) %>
+          <button type = "button" id = "<%=  drive.id %>" class = "addPassenger btn btn-primary" class="btn btn-primary">add myself to this ride
+          </button>
+        </td>
+        <% end %>
+        <% end %>
+        
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Drive', new_drife_path %><br>
+ <span>
+        Select a nearby city: 
+      <select id = "city_dropdown" onchange = "filterDrives();">
+        <option value = "showAll">show all drives</option>
+        <option value="Indianapolis">Indianapolis</option>
+        <option value = "Chicago">Chicago</option>
+        <option value = "StLous">St. Louis</option>
+        <option value = "KansasCity">Kansas City</option>
+        <option value = "Madison">Madison</option>
+      </select>
+      </span>
+
+<script type="text/javascript">
+  
+  $(".addPassenger").click(function() {
+    var id = parseInt(this.id);
+    $.ajax({
+      type: 'put',
+      url: '/drives/' + id + '/addPassenger',
+      data: {
+        passenger_id: <%= @user.id %>,
+        id: id
+      },
+        success: function() {
+          alert("you got added to the drive");
+          window.location = '/drives/' + id
+        }
+    })
+  });
+  
+  
+   function filterDrives() {
+     var x = document.getElementById("city_dropdown").value.toUpperCase();
+     if(x === "CHICAGO") {
+     $.ajax({
+       url: '/drives/filter/chicago',
+       type:'get',
+       data: {city: 'chicago'}, 
+       success: function() {
+         window.location = '/drives/filter'
+       }
+     });
+     }
+ 
+   }
+</script>

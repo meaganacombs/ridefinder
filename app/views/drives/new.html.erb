@@ -1,0 +1,33 @@
+<h1>New drive</h1>
+<%= @user.id %>
+<%= form_for(@drive) do |f| %>
+  <% if @drive.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@drive.errors.count, "error") %> prohibited this drife from being saved:</h2>
+
+      <ul>
+      <% @drive.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :city %><br>
+    <%= f.text_field :city %>
+  </div>
+  <div class="field">
+    <%= f.label :num_passengers %><br>
+    <%= f.number_field :num_passengers %>
+  </div>
+  <div class="field">
+    <%= f.hidden_field :driver_id, :value => @user.id %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+
+
+<%= link_to 'Back', drives_path %>
