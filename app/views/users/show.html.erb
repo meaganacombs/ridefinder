@@ -1,1 +1,63 @@
+<!--This view is to show each user what drives they have created, and what drives they are a passenger for, and each have specifics for any drives that they are involved in, including destination, number of available seats, departure time and date, and where it is departing from-->
 <%= @user.name %>, <%= @user.email %>
+
+<h1>You created these rides: </h1>
+  <% @drives.each do |drive| %>
+  <% if drive.driver_id == @user.id %>
+    <table class="table table-striped table-bordered">
+      <thead>
+         <tr>
+           <th>Destination City</th>
+           <th># of Available Seats</th>
+           <th>Departure Time & Date</th>
+           <th>Departing From:</th>
+           
+        </tr>
+  </thead>
+
+  <tbody>
+  
+      <tr>
+        <td><%= drive.city %></td>
+        <td><%= drive.num_passengers %></td>
+      
+        <td><%= drive.departure_time%></td>
+        <td><%= drive.departure_location %></td>
+        <td><%= link_to 'Edit', edit_drife_path(drive) %></td>
+        <td><%= link_to 'Destroy', drive, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    
+  </tbody>
+</table>
+<% end %>
+<% end %>
+
+<h1>You are signed up as a passenger on these rides:</h1>
+   <% @drives.each do |drive| %>
+<% if drive.passenger_ids.include?(@id) %>
+   <table class="table table-striped table-bordered">
+      <thead>
+         <tr>
+           <th>Destination City</th>
+           <th># of Available Seats</th>
+           <th>Departure Time & Date</th>
+           <th>Departing From:</th>
+           
+        </tr>
+  </thead>
+
+  <tbody>
+  
+      <tr>
+        <td><%= drive.city %></td>
+        <td><%= drive.num_passengers %></td>
+      
+        <td><%= drive.departure_time%></td>
+        <td><%= drive.departure_location %></td>
+        
+      </tr>
+    
+  </tbody>
+</table>
+<% end %>
+<% end %>

@@ -8,6 +8,8 @@ html {
 
 body {
   padding-top: 60px;
+  background-color: #FFD633;
+  
 }
 
 section {
@@ -71,7 +73,13 @@ p {
   }
 }
 
+.table.table.table-striped.table-bordered {
+  background-color: #D6D6D6;
+}
+
 #session_remember_me {
   width: auto;
   margin-left: 0;
 }
+
+*{font-family:Algerian;}

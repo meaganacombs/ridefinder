@@ -1,30 +1,43 @@
+<body bgcolor="#E6E6FA">
+  <!--This view is a list of all drives, with a dropdown option to filter drives based on city. Each drive will list information about that drive, which are the destination city, the number of available passengers, the driver id, and the ability to either add or remove yourself to a drive (if not created by that user, in which they can either edit or destroy their own drive), depending on if they are already a part of that drive-->
 <h1>Listing drives</h1>
-
-<table class="table">
+  <%= link_to 'Create New Drive', new_drife_path %><br><br>
+<table class="table table-striped table-bordered">
   <thead>
     <tr>
-      <th>City</th>
-      <th>Num passengers</th>
-      <th>Driver</th>
-      <th colspan="3"></th>
+      <th>Destination City</th>
+      <th># of Available Seats</th>
+      <th>Departure Time & Date</th>
+      <th>Departing From:</th>
+
     </tr>
   </thead>
-
   <tbody>
     <% @drives.each do |drive| %>
       <tr>
         <td><%= drive.city %></td>
         <td><%= drive.num_passengers %></td>
-        <td><%= drive.driver_id %></td>
+      
+        <td><%= drive.departure_time%></td>
+        <td><%= drive.departure_location %></td>
         <td><%= link_to 'Show', drive %></td>
         <% if drive.driver_id == @user.id %>
         <td><%= link_to 'Edit', edit_drife_path(drive) %></td>
         <td><%= link_to 'Destroy', drive, method: :delete, data: { confirm: 'Are you sure?' } %></td>
         <% else %> 
-        <td>
-          <% unless drive.passenger_ids.include?(@user.id.to_s) %>
+       
+          <% unless drive.passenger_ids.include?(@id)  %>
+          <% if drive.num_passengers > 0 %>
+         <td>
           <button type = "button" id = "<%=  drive.id %>" class = "addPassenger btn btn-primary" class="btn btn-primary">add myself to this ride
           </button>
+          <% end %>
+        </td>
+        <% end %>
+       
+          <% if drive.passenger_ids.include?(@id) %>
+         <td>
+        <button type = "button" id = "<%= drive.id %>" class = "removePassenger btn btn-primary">remove myself from this ride</button>
         </td>
         <% end %>
         <% end %>
@@ -34,23 +47,29 @@
   </tbody>
 </table>
 
-<br>
 
-<%= link_to 'New Drive', new_drife_path %><br>
+
  <span>
+   <!--This is a list of cities included in our dropdown option for filtering cities-->
         Select a nearby city: 
       <select id = "city_dropdown" onchange = "filterDrives();">
         <option value = "showAll">show all drives</option>
         <option value="Indianapolis">Indianapolis</option>
         <option value = "Chicago">Chicago</option>
-        <option value = "StLous">St. Louis</option>
-        <option value = "KansasCity">Kansas City</option>
-        <option value = "Madison">Madison</option>
+        <option value = "StLouis">St. Louis</option>
+        <option value = "Kansas City">Kansas City</option>
+        <option value = "Cincinnati">Cincinnati</option>
+        <option value = "Memphis">Memphis</option>
       </select>
       </span>
+<br>
+
+
 
 <script type="text/javascript">
   
+  
+//   <!--This is a method using ajax to add a passenger to a drive, using that passengers id-->
   $(".addPassenger").click(function() {
     var id = parseInt(this.id);
     $.ajax({
@@ -67,19 +86,37 @@
     })
   });
   
+//   <!--This is a method using ajax to remove a passenger from a drive using that passengers id-->
+  $(".removePassenger").click(function() {
+    var id = parseInt(this.id);
+    $.ajax({
+      type: 'put',
+      url: '/drives/' + id + '/removePassenger',
+      data: {
+      passenger_id: <%= @user.id %>,
+      id: id
+    },
+      success: function() {
+      alert("you've been deleted as a passenger");
+      window.location = '/drives'
+    }
+     
+    })
+  });
   
+//   <!--This is a method to filter drives based on a city, using a dropdown. The page is then redirected to a list of drives from a single city-->
    function filterDrives() {
-     var x = document.getElementById("city_dropdown").value.toUpperCase();
-     if(x === "CHICAGO") {
-     $.ajax({
-       url: '/drives/filter/chicago',
+     var x = document.getElementById("city_dropdown").value;
+       $.ajax({
+       url: '/drives/city/' + x,
        type:'get',
-       data: {city: 'chicago'}, 
+       data: {city: x }, 
        success: function() {
-         window.location = '/drives/filter'
+         window.location = '/drives/city/' + x
        }
      });
-     }
+     
  
    }
 </script>
+</body>

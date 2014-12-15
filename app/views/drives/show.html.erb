@@ -1,19 +1,27 @@
+<!--This is the view for the specifics of a single drive, which include where it is going, how many seats are available, the drivers id, and optional comments from the driver-->
 <p id="notice"><%= notice %></p>
-
+<h1>information about the ride</h1>
 <p>
-  <strong>City:</strong>
+  <strong>Destination:</strong>
   <%= @drive.city %>
 </p>
 
 <p>
-  <strong>Num passengers:</strong>
+  <strong>Number of Seats Still Available:</strong>
   <%= @drive.num_passengers %>
 </p>
 
 <p>
-  <strong>Driver:</strong>
+  <strong>Driver ID:</strong>
   <%= @drive.driver_id %>
 </p>
 
+<p>
+  <strong>Comments from the Driver:</strong>
+  <%= @drive.comment %>
+</p>
+
+<% if @drive.driver_id == @user.id %>
 <%= link_to 'Edit', edit_drife_path(@drive) %> |
-<%= link_to 'Back', drives_path %>
+<% end %>
+

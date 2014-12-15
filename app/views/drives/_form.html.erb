@@ -1,3 +1,5 @@
+
+
 <%= form_for(@drive) do |f| %>
   <% if @drive.errors.any? %>
     <div id="error_explanation">
@@ -12,18 +14,34 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :city %><br>
-    <%= f.text_field :city %>
+  
+    
+    <%= f.select(:city, ['Chicago','Indianapolis', 'St. Louis', 'Cincinnati', 'Kansas City', 'Memphis']) %>
   </div>
   <div class="field">
-    <%= f.label :num_passengers %><br>
+    <%= f.label :number_of_seats_available %><br>
     <%= f.number_field :num_passengers %>
   </div>
+<div class = "field">
+  <%= f.label :departure_time_and_date %><br>
+  <%= f.text_field :departure_time %>
+</div>
+<div class = "field">
+  <%= f.label :departure_location %><br>
+  <%= f.text_field :departure_location %>
+  <div class = "field">
+  <%= f.label :general_comments %><br>
+  <%= f.text_area :comment %>
   <div class="field">
-    <%= f.label :driver_id %><br>
-    <%= f.number_field :driver_id %>
+  <div class="field">
+    <%= f.hidden_field :driver_id, :value => @user.id %>
   </div>
+  
+  
   <div class="actions">
     <%= f.submit %>
   </div>
 <% end %>
+
+
+<%= link_to 'Back', drives_path %>

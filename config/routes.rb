@@ -5,13 +5,15 @@ Rails.application.routes.draw do
   get 'users/show'
 
   put 'drives/:id/addPassenger' => 'drives#add_passenger'
-  get '/drives/filter/:city' => 'drives#filter'
+  put 'drives/:id/removePassenger' => 'drives#remove_passenger'
+  get '/drives/city/:city' => 'drives#filter'
   get    'signup'  => 'users#new'
   get    'login'   => 'sessions#new'
   post   'login'   => 'sessions#create'
   delete 'logout'  => 'sessions#destroy'
   
   get '/drives' =>'drives#index'
+  get '/drives' => 'drives#new'
   
   resources :drives
   resources :users
